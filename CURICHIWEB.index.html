@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CURICHI_SCZ | Shop & Vibe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        
+        .hero-gradient {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('coleccion_burisera_inicio.jpg');
+            background-size: cover; 
+            background-position: center;
+            background-color: #1a1a1a; /* Fallback color */
+        }
+        
+        .hidden-section { display: none; }
+        .card-zoom:hover img { transform: scale(1.05); }
+        .scz-badge { border: 2px dashed #059669; }
+
+        .mood-product-card { display: flex; flex-direction: column; gap: 1rem; }
+        .mood-product-img-container {
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            border-radius: 2rem;
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mood-product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10;
+        }
+        .placeholder-icon {
+            position: absolute;
+            font-size: 3rem;
+            color: #d1d5db;
+            z-index: 5;
+        }
+        .mood-product-card:hover .mood-product-img { transform: scale(1.08); }
+
+        #mobile-menu {
+            transition: transform 0.4s ease-in-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .cart-item-anim { animation: slideIn 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 overflow-x-hidden">
+
+    <!-- NAVEGACIÓN -->
+    <nav class="flex items-center justify-between px-6 py-4 bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-[100]">
+        <div class="flex items-center gap-4">
+            <button onclick="toggleMobileMenu()" class="text-2xl text-black hover:text-green-600 transition-colors md:hidden">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+            <div class="flex items-center gap-2 cursor-pointer" onclick="showSection('home')">
+                <img src="logo_curichi.jpeg" alt="Logo Curichi" onerror="this.src='https://ui-avatars.com/api/?name=C+S&background=059669&color=fff'" class="w-10 h-10 rounded-full object-cover border-2 border-green-600">
+                <span class="font-black text-xl text-black uppercase italic tracking-tighter">CURICHI_SCZ</span>
+            </div>
+        </div>
+        
+        <div class="hidden md:flex items-center gap-8 font-bold text-[10px] uppercase tracking-widest">
+            <button onclick="showSection('home')" class="hover:text-green-600 transition-colors">Inicio</button>
+            <button onclick="showMood('urban')" class="hover:text-green-600 transition-colors">Urban Metal</button>
+            <button onclick="showMood('joda')" class="hover:text-green-600 transition-colors">Mood Joda</button>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <button onclick="toggleCart()" class="relative text-2xl hover:text-green-600 transition-colors">
+                <i class="fa-solid fa-bag-shopping text-gray-900"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-green-600 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MENÚ LATERAL -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black/90 z-[150] transform -translate-x-full md:hidden">
+        <div class="flex flex-col p-10 gap-8 h-full">
+            <button onclick="toggleMobileMenu()" class="text-white text-4xl self-end">&times;</button>
+            <div class="flex flex-col gap-6 text-white text-3xl font-black italic uppercase tracking-tighter">
+                <button onclick="showSection('home'); toggleMobileMenu()" class="text-left hover:text-green-500">Inicio</button>
+                <button onclick="showMood('urban'); toggleMobileMenu()" class="text-left hover:text-green-500">Mood Urban</button>
+                <button onclick="showMood('joda'); toggleMobileMenu()" class="text-left hover:text-green-500">Mood Joda</button>
+                <button onclick="showMood('business'); toggleMobileMenu()" class="text-left hover:text-green-500">Mood Business</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main id="main-content">
+        <section id="home-section">
+            <div class="relative h-[65vh] flex items-center justify-center text-center text-white px-4 hero-gradient">
+                <div class="max-w-2xl">
+                    <h1 class="text-5xl md:text-7xl font-black mb-4 drop-shadow-lg uppercase italic leading-none">
+                        Tu trago con las mejores vibes, <span class="text-green-400">¡bien de ida!</span>
+                    </h1>
+                    <p class="text-lg md:text-xl font-light drop-shadow-md opacity-90">
+                        Vasos upcycled & personalizados para que tu junte sea de otro level.
+                    </p>
+                </div>
+            </div>
+
+            <div class="py-20 px-6">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl font-black text-gray-900 uppercase tracking-widest italic">Nuestros <span class="text-green-600">Moods</span></h2>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Mood Joda -->
+                        <div onclick="showMood('joda')" class="group card-zoom cursor-pointer">
+                            <div class="bg-white rounded-3xl shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-2">
+                                <div class="h-72 overflow-hidden bg-gray-200 relative flex items-center justify-center">
+                                    <i class="fa-solid fa-glass-cheers absolute text-4xl text-gray-400"></i>
+                                    <img src="vasos_buriseros.jpg" alt="Mood Joda" class="w-full h-full object-cover relative z-10" onerror="this.style.display='none'">
+                                </div>
+                                <div class="p-8">
+                                    <h3 class="font-black text-2xl mb-1 italic uppercase text-black">MOOD: JODA</h3>
+                                    <p class="text-xs font-bold text-green-600 mb-4 uppercase tracking-widest">Vasos Buriseros</p>
+                                    <p class="text-sm text-gray-500 font-medium italic">Pa' los que no se quieren ir temprano.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mood Business -->
+                        <div onclick="showMood('business')" class="group card-zoom cursor-pointer">
+                            <div class="bg-white rounded-3xl shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-2">
+                                <div class="h-72 overflow-hidden bg-gray-200 relative flex items-center justify-center">
+                                    <i class="fa-solid fa-briefcase absolute text-4xl text-gray-400"></i>
+                                    <img src="vaso_corporativo.jpg" alt="Mood Business" class="w-full h-full object-cover relative z-10" onerror="this.style.display='none'">
+                                </div>
+                                <div class="p-8">
+                                    <h3 class="font-black text-2xl mb-1 italic uppercase text-black">MOOD: BUSINESS</h3>
+                                    <p class="text-xs font-bold text-green-600 mb-4 uppercase tracking-widest">Corporativos</p>
+                                    <p class="text-sm text-gray-500 font-medium italic">Estilo serio pero eco-friendly.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mood Urban -->
+                        <div onclick="showMood('urban')" class="group card-zoom cursor-pointer">
+                            <div class="bg-white rounded-3xl shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 border-2 border-green-600/20">
+                                <div class="h-72 overflow-hidden bg-gray-200 relative flex items-center justify-center">
+                                    <i class="fa-solid fa-city absolute text-4xl text-gray-400"></i>
+                                    <img src="paceñas_mediana_pequeña.jpeg" alt="Mood Urban" class="w-full h-full object-cover relative z-10" onerror="this.style.display='none'">
+                                </div>
+                                <div class="p-8">
+                                    <h3 class="font-black text-2xl mb-1 italic uppercase text-green-600">MOOD: URBAN</h3>
+                                    <p class="text-xs font-bold text-green-600 mb-4 uppercase tracking-widest">Metal Flow</p>
+                                    <p class="text-sm text-gray-500 font-medium italic">Diseño industrial y frío al máximo.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group opacity-50">
+                            <div class="bg-gray-200 rounded-3xl h-full flex flex-col justify-center items-center p-10 text-center border-4 border-dashed border-gray-300">
+                                <i class="fa-solid fa-bolt text-4xl text-gray-400 mb-4"></i>
+                                <h3 class="font-black text-xl mb-1 italic text-gray-400 uppercase">TERERÉ</h3>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Próximamente</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mood-section" class="hidden-section bg-white min-h-screen">
+            <div class="py-16 px-6 max-w-7xl mx-auto">
+                <button onclick="showSection('home')" class="mb-12 flex items-center gap-3 text-gray-400 font-bold uppercase text-xs tracking-widest hover:text-black transition-all">
+                    <i class="fa-solid fa-arrow-left"></i> Volver a los moods
+                </button>
+                <div class="mb-20">
+                    <h2 id="mood-title" class="text-6xl md:text-8xl font-black italic uppercase tracking-tighter text-black mb-6 leading-none"></h2>
+                    <p id="mood-desc" class="max-w-2xl text-gray-500 text-xl font-light italic"></p>
+                </div>
+                <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-black text-white py-24 px-6 mt-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-16 border-b border-white/10 pb-20">
+                <div class="flex flex-col gap-6">
+                    <div class="flex items-center gap-3">
+                        <img src="logo_curichi.jpeg" alt="Logo" onerror="this.src='https://ui-avatars.com/api/?name=C+S&background=059669&color=fff'" class="w-16 h-16 rounded-full border-2 border-green-600">
+                        <span class="text-5xl font-black italic tracking-tighter uppercase">CURICHI_SCZ</span>
+                    </div>
+                    <p class="text-gray-400 max-w-sm text-xl font-light">Transformamos botellas en objetos de deseo. Arte, joda y sustentabilidad.</p>
+                    <div class="flex gap-6 text-3xl">
+                        <a href="https://www.instagram.com/curichi_scz/" target="_blank" class="hover:text-green-500 transition-colors">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=61586590834903" target="_blank" class="hover:text-green-500 transition-colors">
+                            <i class="fa-brands fa-facebook"></i>
+                        </a>
+                        <a href="https://wa.me/59176342500" target="_blank" class="hover:text-green-500 transition-colors">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center md:items-end gap-6">
+                    <div class="scz-badge px-10 py-5 rounded-full border-2 border-green-600/50">
+                        <p class="font-black text-green-500 text-xl italic uppercase tracking-[0.2em]">Proudly Made in SCZ 🌴</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-12 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-600 font-bold uppercase tracking-widest text-[10px]">
+                <p>&copy; 2026 CURICHI_SCZ. #BienDeIda pariente</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CARRITO -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.2)] z-[200] transform translate-x-full transition-transform duration-500 ease-in-out">
+        <div class="p-10 h-full flex flex-col">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl font-black uppercase italic text-black">Tu Bolsa</h2>
+                <button onclick="toggleCart()" class="text-4xl text-gray-300 hover:text-black">&times;</button>
+            </div>
+            <div id="cart-items-container" class="flex-grow overflow-y-auto space-y-4 pr-2"></div>
+            <div class="border-t border-gray-100 pt-10 mt-6">
+                <div class="flex justify-between text-3xl font-black mb-10 italic">
+                    <span>TOTAL</span>
+                    <span id="cart-total" class="text-green-700">0 Bs.</span>
+                </div>
+                <button onclick="checkoutWhatsApp()" class="w-full bg-black text-white py-6 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-green-600 transition-all flex items-center justify-center gap-4 active:scale-95">
+                    PEDIR POR WHATSAPP <i class="fa-brands fa-whatsapp text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP_NUMBER = "59176342500"; 
+
+        const products = {
+            joda: {
+                title: "Mood Joda",
+                desc: "Los esenciales para que la buri no decaiga.",
+                items: [
+                    { id: 101, name: "FERNETOMETRO", price: 65, img: "vaso_fernetometro.jpg", desc: "70/30 PA´ NO PELARLE", icon: "fa-wine-glass" },
+                    { id: 102, name: "COLECCION BURISERA", price: 120, img: "COLECCION_BURISERA.jpg", desc: "ENTRE AMIGOS SE DISFRUTA MÁS", icon: "fa-users" },
+                    { id: 103, name: "COLECCION DIVAS", price: 120, img: "COLECCION_DIVAS.jpeg", desc: "PARA LAS REINAS", icon: "fa-crown" }
+                ]
+            },
+            business: {
+                title: "Mood Business",
+                desc: "Regalos corporativos de alto impacto.",
+                items: [
+                    { id: 201, name: "VASO VINO CORPORATIVO", price: 25, img: "vaso_vino_corporativo.jpg", desc: "Elegancia artesanal", icon: "fa-building" },
+                    { id: 202, name: "VASO CORPORATIVO", price: 55, img: "vaso_corporativo.jpg", desc: "Marca la diferencia", icon: "fa-id-card" },
+                    { id: 203, name: "WHISKY NEGRO", price: 65, img: "whisky_negro_corporativo.jpg", desc: "Dark mode elegante", icon: "fa-gem" }
+                ]
+            },
+            urban: {
+                title: "Urban Metal",
+                desc: "Estilo industrial cruceño.",
+                items: [
+                    { id: 301, name: "FOUR LOKO GOLD", price: 90, img: "four_loko_gold.jpeg", desc: "Se prendio esta sh...", icon: "fa-bolt" },
+                    { id: 302, name: "PACEÑAS", price: 45, img: "paceñas_mediana_pequeña.jpeg", desc: "Algo chill para unos teres", icon: "fa-beer" },
+                    { id: 303, name: "DUCAL PEQUEÑA", price: 45, img: "ducal_pequeña.jpeg", desc: "Ideal para algo chill", icon: "fa-beer" },
+                    { id: 304, name: "HUARI", price: 65, img: "Huari.jpeg", desc: "Tradition para el after", icon: "fa-glass-whiskey" },
+                    { id: 305, name: "MALTA PEQUEÑA", price: 45, img: "malta_pequeña.jpeg", desc: "Re-energize after office", icon: "fa-mug-hot" },
+                    { id: 306, name: "QUILMES", price: 65, img: "quilmes.jpeg", desc: "Mode: Joda, let´s get it!", icon: "fa-glass-cheers" },
+                    { id: 307, name: "MONSTER BLANCO", price: 65, img: "monster_blanco.jpeg", desc: "Ultra clean flow", icon: "fa-bolt" },
+                    { id: 308, name: "MONSTER NEGRO", price: 65, img: "monster_negro.jpeg", desc: "Classic energy vibe", icon: "fa-bolt" },
+                    { id: 309, name: "FOUR LOKO ROSE", price: 90, img: "FOUR_LOKO_ROSE.jpg", desc: "Pinky but dangerous", icon: "fa-heart" },
+                    { id: 310, name: "FOUR LOKO AZUL", price: 90, img: "FOUR_LOKO_AZUL.jpg", desc: "Electric night mode", icon: "fa-moon" },
+                    { id: 311, name: "CONTI", price: 45, img: "CONTI.jpg", desc: "The local metal taste", icon: "fa-anchor" },
+                    { id: 312, name: "HEINEKEN", price: 65, img: "HEINEKEN.jpg", desc: "International green vibe", icon: "fa-globe" },
+                    { id: 313, name: "COCA COLA", price: 45, img: "COCACOLA.jpg", desc: "The real classic", icon: "fa-bottle-water" },
+                    { id: 314, name: "MONSTER MANGO LOCO", price: 65, img: "monster_mango_loco.jpeg", desc: "Voj taj crazy hermanazo?", icon: "fa-sun" }
+                ]
+            }
+        };
+
+        let cart = [];
+
+        function showSection(sectionId) {
+            document.getElementById('home-section').classList.add('hidden-section');
+            document.getElementById('mood-section').classList.add('hidden-section');
+            document.getElementById(`${sectionId}-section`).classList.remove('hidden-section');
+            window.scrollTo(0,0);
+        }
+
+        function showMood(moodKey) {
+            const mood = products[moodKey];
+            document.getElementById('mood-title').innerText = mood.title;
+            document.getElementById('mood-desc').innerText = mood.desc;
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+            
+            mood.items.forEach(item => {
+                grid.innerHTML += `
+                    <div class="mood-product-card group">
+                        <div class="mood-product-img-container shadow-lg">
+                            <i class="fa-solid ${item.icon || 'fa-glass-water'} placeholder-icon"></i>
+                            <img src="${item.img}" alt="${item.name}" class="mood-product-img" onerror="this.style.opacity='0'">
+                        </div>
+                        <div class="flex flex-col gap-2 mt-4 px-2">
+                            <h4 class="text-4xl font-black uppercase italic text-black">${item.name}</h4>
+                            <p class="text-gray-400 font-bold text-xs uppercase h-8">${item.desc}</p>
+                            <div class="flex justify-between items-center border-t pt-6">
+                                <span class="text-4xl font-black text-black italic">${item.price} Bs</span>
+                                <button onclick="addToCart(${item.id}, '${item.name}', ${item.price})" class="bg-black text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase hover:bg-green-600 transition-all active:scale-95">
+                                    I WANT IT PARIENTE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            showSection('mood');
+        }
+
+        function addToCart(id, name, price) {
+            cart.push({ id, name, price });
+            updateCartUI();
+            const btn = event.currentTarget;
+            btn.innerHTML = "¡LISTO!";
+            btn.classList.add('bg-green-600');
+            setTimeout(() => {
+                btn.innerHTML = "I WANT IT PARIENTE";
+                btn.classList.remove('bg-green-600');
+            }, 800);
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const countLabel = document.getElementById('cart-count');
+            const totalLabel = document.getElementById('cart-total');
+            countLabel.innerText = cart.length;
+            container.innerHTML = "";
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-300 mt-20 italic">No hay nada por aquí, pariente.</p>`;
+                totalLabel.innerText = "0 Bs.";
+                return;
+            }
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price;
+                container.innerHTML += `
+                    <div class="flex justify-between items-center py-4 border-b border-gray-50 cart-item-anim">
+                        <div><p class="font-black text-sm uppercase italic">${item.name}</p><p class="text-green-700 font-black">${item.price} Bs.</p></div>
+                        <button onclick="removeFromCart(${index})" class="text-gray-300 hover:text-red-600"><i class="fa-solid fa-trash-can text-xl"></i></button>
+                    </div>
+                `;
+            });
+            totalLabel.innerText = `${total} Bs.`;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('-translate-x-full');
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return;
+            let message = "¡Qué tal Curichi SCZ! 👋 Vi la web y quiero pedir estos pariente:\n\n";
+            let total = 0;
+            cart.forEach(item => {
+                message += `• ${item.name} (${item.price} Bs.)\n`;
+                total += item.price;
+            });
+            message += `\n*TOTAL: ${total} Bs.* \n\n¿Me confirman para coordinar el envío?`;
+            
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+        updateCartUI();
+    </script>
+</body>
+</html>
